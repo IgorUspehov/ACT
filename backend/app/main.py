@@ -20,7 +20,7 @@ DB_PATH = Path(__file__).resolve().parent.parent / "data" / "database" / "act.db
 @app.on_event("startup")
 def initialize_demo_database():
     if not DB_PATH.exists():
-        from ingest import ingest
+        from app.ingest import ingest
         ingest()
 
 @app.get("/api/health")
