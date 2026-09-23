@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 
 import type { Campaign, CampaignStatus, Decision, DecisionStatus, SearchSignal, SearchTerm } from "@/data/demo"
 
-const API_BASE = "https://act-backend-6n74.onrender.com"
+const API_BASE = ""
 
 const campaignStatuses = ["Active", "Paused", "Learning", "Limited"] as const
 const decisionStatuses = ["Applied", "Pending", "Recommended", "Rejected"] as const

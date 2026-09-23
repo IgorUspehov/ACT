@@ -1,0 +1,10 @@
+# Existing Render web service: act-backend.
+# One service serves the API and the built frontend.
+# Set Root Directory to the repository root (clear "backend").
+# Do not add a second service for the frontend.
+services:
+  - type: web
+    name: act-backend
+    runtime: python
+    buildCommand: bash build.sh
+    startCommand: uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port $PORT
