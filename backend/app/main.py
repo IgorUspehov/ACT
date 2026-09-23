@@ -17,7 +17,10 @@ app.add_middleware(
 
 BACKEND_ROOT = Path(__file__).resolve().parent.parent
 DB_PATH = BACKEND_ROOT / "data" / "database" / "act.db"
-FRONTEND_DIST = BACKEND_ROOT.parent / "frontend" / "dist"
+FRONTEND_CANDIDATES = (
+    BACKEND_ROOT.parent / "frontend" / "dist",
+    BACKEND_ROOT / "static",
+)
 
 
 @app.on_event("startup")
@@ -48,10 +51,18 @@ def decisions():
     return {"decisions": []}
 
 
+def _frontend_dist() -> Path | None:
+    for candidate in FRONTEND_CANDIDATES:
+        if (candidate / "index.html").is_file():
+            return candidate
+    return None
+
+
 def _frontend_file(relative_path: str) -> Path | None:
-    if not relative_path or relative_path.endswith("/"):
+    root = _frontend_dist()
+    if root is None or not relative_path or relative_path.endswith("/"):
         return None
-    root = FRONTEND_DIST.resolve()
+    root = root.resolve()
     candidate = (root / relative_path).resolve()
     try:
         candidate.relative_to(root)
@@ -75,7 +86,8 @@ def frontend(full_path: str = ""):
         if "." in Path(full_path).name:
             raise HTTPException(status_code=404)
 
-    index = FRONTEND_DIST / "index.html"
-    if index.is_file():
+    dist = _frontend_dist()
+    index = dist / "index.html" if dist is not None else None
+    if index is not None and index.is_file():
         return FileResponse(index)
     raise HTTPException(status_code=503, detail="Frontend is not built")

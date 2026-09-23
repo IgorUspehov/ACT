@@ -17,4 +17,7 @@ fi
 
 npm ci --prefix frontend
 npm run build --prefix frontend
+rm -rf backend/static
+mkdir -p backend/static
+cp -a frontend/dist/. backend/static/
 python -m pip install -r backend/requirements.txt
