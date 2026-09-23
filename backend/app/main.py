@@ -30,7 +30,7 @@ def health():
 
 @app.get("/api/campaigns")
 def campaigns():
-    from metrics import get_campaign_metrics
+    from app.metrics import get_campaign_metrics
     return {"campaigns": get_campaign_metrics()}
 
 

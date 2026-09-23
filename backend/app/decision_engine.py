@@ -1,7 +1,7 @@
 import yaml
 from pathlib import Path
 
-from classifier import classify_campaigns
+from app.classifier import classify_campaigns
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 MANIFEST_PATH = BASE_DIR / "config" / "manifest.yml"

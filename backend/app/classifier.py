@@ -1,4 +1,4 @@
-from metrics import get_campaign_metrics
+from app.metrics import get_campaign_metrics
 
 
 def classify_campaigns():

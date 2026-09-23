@@ -1,4 +1,4 @@
-from decision_engine import make_decisions
+from app.decision_engine import make_decisions
 
 
 def generate_report():
