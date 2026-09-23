@@ -12,6 +12,17 @@ app.add_middleware(
 )
 
 
+from pathlib import Path
+
+DB_PATH = Path(__file__).resolve().parent.parent / "data" / "database" / "act.db"
+
+
+@app.on_event("startup")
+def initialize_demo_database():
+    if not DB_PATH.exists():
+        from ingest import ingest
+        ingest()
+
 @app.get("/api/health")
 def health():
     return {"status": "ok", "environment": "DEMO"}
