@@ -23,7 +23,8 @@ def initialize_demo_database():
         from app.ingest import ingest
         ingest()
 
-@app.get("/api/health")
+@app.api_route("/", methods=["GET", "HEAD"])
+@app.api_route("/api/health", methods=["GET", "HEAD"])
 def health():
     return {"status": "ok", "environment": "DEMO"}
 
