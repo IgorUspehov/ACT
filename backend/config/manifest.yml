@@ -1,0 +1,19 @@
+economics:
+  currency: "EUR"
+  target_cpa: 10.00
+decision_rules:
+  insufficient_data:
+    multiplier: 2.0
+  kill:
+    multiplier: 3.0
+    purchases: 0
+  promising:
+    min_purchases: 1
+    max_cpa_ratio: 1.0
+  scale:
+    min_purchases: 5
+    max_cpa_ratio: 0.8
+search_terms:
+  min_clicks_for_decision: 3
+  negative_if_zero_conversions_after_spend: 1.5
+  move_to_exact_if_purchases: 1

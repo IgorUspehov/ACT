@@ -1,0 +1,6 @@
+date,source,campaign,ad_group,search_term,impressions,clicks,installs,spend,purchases,revenue,status
+2026-05-20,DEMO,Discovery,SearchMatch,"ai planner",120,8,3,4.20,0,0,DEMO
+2026-05-20,DEMO,Discovery,SearchMatch,"free planner",340,15,5,6.80,0,0,DEMO
+2026-05-20,DEMO,Discovery,BroadMatch,"calendar free",90,4,1,1.90,0,0,DEMO
+2026-05-20,DEMO,Exact,Category,"todo app",200,12,6,7.50,2,19.98,DEMO
+2026-05-20,DEMO,Exact,Brand,"myapp",50,10,8,3.20,4,39.96,DEMO
