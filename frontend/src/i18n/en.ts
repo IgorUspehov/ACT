@@ -22,17 +22,21 @@ export const en: Messages = {
   brand: {
     performance: "Performance",
   },
+  feedback: {
+    loading: "Loading data from the API…",
+    error: "Could not load data from the API. Please try again.",
+  },
   workspace: {
     label: "Workspace",
     account: "Demo account",
-    sample: "Sample data only",
+    sample: "Demo API",
   },
   topbar: {
     environment: "ENVIRONMENT: DEMO",
   },
   overview: {
     title: "Overview",
-    subtitle: "{window} · sample performance for the demo environment",
+    subtitle: "Demo environment",
     vsPrior: "vs prior 7 days",
   },
   kpi: {
@@ -45,11 +49,11 @@ export const en: Messages = {
   },
   campaigns: {
     title: "Campaigns",
-    summary: "{shown} of {total} demo campaigns · {window}",
+    summary: "{shown} of {total} campaigns",
     searchPlaceholder: "Search campaigns",
     searchLabel: "Search campaigns",
-    empty: "No demo campaigns match this filter.",
-    caption: "Demo campaign performance for {window}",
+    empty: "No campaigns match this filter.",
+    caption: "Campaign performance",
     total: "Total",
     columns: {
       campaign: "Campaign",
@@ -71,11 +75,11 @@ export const en: Messages = {
   },
   searchTerms: {
     title: "Search Terms",
-    summary: "{shown} of {total} demo queries · CPA is spend ÷ purchases",
+    summary: "{shown} of {total} queries · CPA is spend ÷ purchases",
     searchPlaceholder: "Search terms or campaigns",
     searchLabel: "Search terms",
-    empty: "No demo search terms match this filter.",
-    caption: "Demo search terms and the signal attached to each query",
+    empty: "No search terms match this filter.",
+    caption: "Search terms and the signal attached to each query",
     columns: {
       term: "Search term",
       match: "Match",
@@ -101,7 +105,8 @@ export const en: Messages = {
   },
   decisions: {
     title: "Decisions",
-    summary: "{count} sample calls for the demo account",
+    summary: "{count} decisions",
+    empty: "No decisions returned by the API.",
     day: "Day",
     status: {
       Applied: "Applied",
@@ -133,5 +138,5 @@ export const en: Messages = {
       Queued: "Queued",
     },
   },
-  footer: "Demo environment · figures are sample data.",
+  footer: "Demo environment.",
 }

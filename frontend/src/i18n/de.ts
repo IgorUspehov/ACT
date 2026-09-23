@@ -22,17 +22,21 @@ export const de: Messages = {
   brand: {
     performance: "Performance",
   },
+  feedback: {
+    loading: "Daten werden von der API geladen…",
+    error: "Die API-Daten konnten nicht geladen werden. Bitte erneut versuchen.",
+  },
   workspace: {
     label: "Arbeitsbereich",
     account: "Demokonto",
-    sample: "Nur Beispieldaten",
+    sample: "Demo-API",
   },
   topbar: {
     environment: "UMGEBUNG: DEMO",
   },
   overview: {
     title: "Übersicht",
-    subtitle: "{window} · Beispielwerte für die Demo-Umgebung",
+    subtitle: "Demo-Umgebung",
     vsPrior: "vs. vorherige 7 Tage",
   },
   kpi: {
@@ -45,11 +49,11 @@ export const de: Messages = {
   },
   campaigns: {
     title: "Kampagnen",
-    summary: "{shown} von {total} Demo-Kampagnen · {window}",
+    summary: "{shown} von {total} Kampagnen",
     searchPlaceholder: "Kampagnen suchen",
     searchLabel: "Kampagnen suchen",
-    empty: "Keine Demo-Kampagne entspricht diesem Filter.",
-    caption: "Demo-Kampagnen für {window}",
+    empty: "Keine Kampagne entspricht diesem Filter.",
+    caption: "Kampagnenleistung",
     total: "Gesamt",
     columns: {
       campaign: "Kampagne",
@@ -71,11 +75,11 @@ export const de: Messages = {
   },
   searchTerms: {
     title: "Suchbegriffe",
-    summary: "{shown} von {total} Demo-Suchanfragen · CPA ist Ausgaben ÷ Käufe",
+    summary: "{shown} von {total} Suchanfragen · CPA ist Ausgaben ÷ Käufe",
     searchPlaceholder: "Begriffe oder Kampagnen suchen",
     searchLabel: "Suchbegriffe suchen",
-    empty: "Keine Demo-Suchanfrage entspricht diesem Filter.",
-    caption: "Demo-Suchbegriffe und das Signal je Anfrage",
+    empty: "Keine Suchanfrage entspricht diesem Filter.",
+    caption: "Suchbegriffe und das Signal je Anfrage",
     columns: {
       term: "Suchbegriff",
       match: "Match",
@@ -101,7 +105,8 @@ export const de: Messages = {
   },
   decisions: {
     title: "Entscheidungen",
-    summary: "{count} Beispielentscheidungen für das Demokonto",
+    summary: "{count} Entscheidungen",
+    empty: "Die API hat keine Entscheidungen zurückgegeben.",
     day: "Tag",
     status: {
       Applied: "Angewendet",
@@ -133,5 +138,5 @@ export const de: Messages = {
       Queued: "Wartend",
     },
   },
-  footer: "Demo-Umgebung · Die Werte sind Beispieldaten.",
+  footer: "Demo-Umgebung.",
 }

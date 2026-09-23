@@ -22,17 +22,21 @@ export const ru: Messages = {
   brand: {
     performance: "Эффективность",
   },
+  feedback: {
+    loading: "Загрузка данных из API…",
+    error: "Не удалось загрузить данные из API. Попробуйте ещё раз.",
+  },
   workspace: {
     label: "Пространство",
     account: "Демо-аккаунт",
-    sample: "Только пример данных",
+    sample: "Демо-API",
   },
   topbar: {
     environment: "СРЕДА: ДЕМО",
   },
   overview: {
     title: "Обзор",
-    subtitle: "{window} · пример показателей для демо-среды",
+    subtitle: "Демо-среда",
     vsPrior: "к предыдущим 7 дням",
   },
   kpi: {
@@ -45,11 +49,11 @@ export const ru: Messages = {
   },
   campaigns: {
     title: "Кампании",
-    summary: "{shown} из {total} демо-кампаний · {window}",
+    summary: "{shown} из {total} кампаний",
     searchPlaceholder: "Поиск кампаний",
     searchLabel: "Поиск кампаний",
-    empty: "Нет демо-кампаний по этому фильтру.",
-    caption: "Показатели демо-кампаний за {window}",
+    empty: "Нет кампаний по этому фильтру.",
+    caption: "Показатели кампаний",
     total: "Итого",
     columns: {
       campaign: "Кампания",
@@ -71,11 +75,11 @@ export const ru: Messages = {
   },
   searchTerms: {
     title: "Поисковые запросы",
-    summary: "{shown} из {total} демо-запросов · CPA — это расход ÷ покупки",
+    summary: "{shown} из {total} запросов · CPA — это расход ÷ покупки",
     searchPlaceholder: "Поиск запросов или кампаний",
     searchLabel: "Поиск запросов",
-    empty: "Нет демо-запросов по этому фильтру.",
-    caption: "Демо-запросы и сигнал по каждому запросу",
+    empty: "Нет запросов по этому фильтру.",
+    caption: "Запросы и сигнал по каждому запросу",
     columns: {
       term: "Запрос",
       match: "Совпадение",
@@ -101,7 +105,8 @@ export const ru: Messages = {
   },
   decisions: {
     title: "Решения",
-    summary: "{count} решений для демо-аккаунта",
+    summary: "{count} решений",
+    empty: "API не вернул решений.",
     day: "День",
     status: {
       Applied: "Применено",
@@ -133,5 +138,5 @@ export const ru: Messages = {
       Queued: "В очереди",
     },
   },
-  footer: "Демо-среда · показатели являются примером.",
+  footer: "Демо-среда.",
 }

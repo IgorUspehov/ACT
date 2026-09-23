@@ -9,6 +9,7 @@ import { navItems, type SectionId } from "@/components/layout/nav"
 import { Sidebar } from "@/components/layout/sidebar"
 import { TopBar } from "@/components/layout/topbar"
 import { useI18n } from "@/i18n"
+import { useDashboardData } from "@/lib/api"
 
 const SCROLL_MARKER = 140
 
@@ -26,6 +27,7 @@ export default function App() {
   const [active, setActive] = useState<SectionId>("overview")
   const lock = useRef(false)
   const { messages } = useI18n()
+  const dashboard = useDashboardData()
 
   useEffect(() => {
     function update() {
@@ -54,10 +56,10 @@ export default function App() {
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar active={active} onNavigate={navigate} />
         <main className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col gap-8 px-4 py-6 pb-[40vh] sm:px-6 lg:px-8">
-          <KpiGrid />
-          <CampaignsTable />
-          <SearchTermsTable />
-          <DecisionsPanel />
+          <KpiGrid campaigns={dashboard.campaigns} />
+          <CampaignsTable source={dashboard.campaigns} />
+          <SearchTermsTable source={dashboard.searchTerms} />
+          <DecisionsPanel source={dashboard.decisions} />
           <ExperimentsBoard />
           <p className="pb-2 text-center text-xs text-muted-foreground">{messages.footer}</p>
         </main>

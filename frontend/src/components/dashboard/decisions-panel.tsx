@@ -2,7 +2,8 @@ import { CircleCheck, CircleX, Clock, Sparkles } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
-import { decisions, type DecisionStatus } from "@/data/demo"
+import { type Decision, type DecisionStatus } from "@/data/demo"
+import type { Resource } from "@/lib/api"
 import { fill, useI18n } from "@/i18n"
 import type { Messages } from "@/i18n/types"
 
@@ -43,8 +44,9 @@ function metricLabel(label: string, messages: Messages) {
   return label
 }
 
-export function DecisionsPanel() {
+export function DecisionsPanel({ source }: { source: Resource<Decision[]> }) {
   const { messages } = useI18n()
+  const decisions = source.status === "ready" ? source.data : []
 
   return (
     <section id="decisions" className="scroll-mt-28 space-y-4">
@@ -55,42 +57,59 @@ export function DecisionsPanel() {
         </p>
       </header>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        {decisions.map((decision) => {
-          const status = statusPresentation[decision.status]
-          const Icon = status.icon
+      {source.status !== "ready" ? (
+        <p
+          className={source.status === "error" ? "text-sm text-red-600" : "text-sm text-muted-foreground"}
+          role="status"
+        >
+          {source.status === "error" ? messages.feedback.error : messages.feedback.loading}
+        </p>
+      ) : decisions.length === 0 ? (
+        <p className="text-sm text-muted-foreground">{messages.decisions.empty}</p>
+      ) : (
+        <div className="grid gap-4 lg:grid-cols-2">
+          {decisions.map((decision) => {
+            const status = decision.status ? statusPresentation[decision.status] : null
+            const Icon = status?.icon
 
-          return (
-            <article
-              key={decision.id}
-              className="flex overflow-hidden rounded-xl border bg-card shadow-sm"
-            >
-              <div className={`w-1 shrink-0 ${status.bar}`} />
-              <div className="flex min-w-0 flex-1 flex-col gap-4 p-5 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Badge variant={status.variant}>
-                      <Icon />
-                      {messages.decisions.status[decision.status]}
-                    </Badge>
-                    <time className="text-xs text-muted-foreground">{decision.time}</time>
+            return (
+              <article
+                key={decision.id}
+                className="flex overflow-hidden rounded-xl border bg-card shadow-sm"
+              >
+                <div className={`w-1 shrink-0 ${status?.bar ?? "bg-primary"}`} />
+                <div className="flex min-w-0 flex-1 flex-col gap-4 p-5 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge variant={status?.variant ?? "secondary"}>
+                        {Icon ? <Icon /> : null}
+                        {decision.status ? messages.decisions.status[decision.status] : decision.label}
+                      </Badge>
+                      {decision.time ? (
+                        <time className="text-xs text-muted-foreground">{decision.time}</time>
+                      ) : null}
+                    </div>
+                    <h3 className="mt-3 text-sm font-semibold">{decision.title}</h3>
+                    {decision.detail ? (
+                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                        {decision.detail}
+                      </p>
+                    ) : null}
                   </div>
-                  <h3 className="mt-3 text-sm font-semibold">{decision.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                    {decision.detail}
-                  </p>
+                  {decision.metric ? (
+                    <div className="shrink-0 sm:text-right">
+                      <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                        {metricLabel(decision.metricLabel, messages)}
+                      </p>
+                      <p className="mt-1 text-lg font-semibold tabular-nums">{decision.metric}</p>
+                    </div>
+                  ) : null}
                 </div>
-                <div className="shrink-0 sm:text-right">
-                  <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                    {metricLabel(decision.metricLabel, messages)}
-                  </p>
-                  <p className="mt-1 text-lg font-semibold tabular-nums">{decision.metric}</p>
-                </div>
-              </div>
-            </article>
-          )
-        })}
-      </div>
+              </article>
+            )
+          })}
+        </div>
+      )}
     </section>
   )
 }

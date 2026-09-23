@@ -13,7 +13,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { searchTerms, type SearchSignal } from "@/data/demo"
+import { type SearchSignal, type SearchTerm } from "@/data/demo"
+import type { Resource } from "@/lib/api"
 import { fill, useI18n } from "@/i18n"
 import { formatMoney, formatNumber } from "@/lib/format"
 import { cpa } from "@/lib/metrics"
@@ -27,19 +28,21 @@ const signalVariant = {
   "Add keyword": "default",
 } as const satisfies Record<SearchSignal, "success" | "info" | "destructive" | "warning" | "default">
 
-export function SearchTermsTable() {
+export function SearchTermsTable({ source }: { source: Resource<SearchTerm[]> }) {
   const { messages } = useI18n()
   const [query, setQuery] = useState("")
+  const searchTerms = source.status === "ready" ? source.data : []
 
   const rows = useMemo(() => {
+    if (source.status !== "ready") return []
     const needle = query.trim().toLowerCase()
-    if (needle.length === 0) return searchTerms
-    return searchTerms.filter((row) => {
+    if (needle.length === 0) return source.data
+    return source.data.filter((row) => {
       return (
         row.term.toLowerCase().includes(needle) || row.campaign.toLowerCase().includes(needle)
       )
     })
-  }, [query])
+  }, [query, source])
 
   return (
     <section id="search-terms" className="scroll-mt-28">
@@ -50,7 +53,7 @@ export function SearchTermsTable() {
               <CardTitle>{messages.searchTerms.title}</CardTitle>
               <CardDescription className="mt-1">
                 {fill(messages.searchTerms.summary, {
-                  shown: rows.length,
+                  shown: source.status === "ready" ? rows.length : 0,
                   total: searchTerms.length,
                 })}
               </CardDescription>
@@ -68,6 +71,18 @@ export function SearchTermsTable() {
           </div>
         </CardHeader>
         <CardContent className="px-0">
+          {source.status !== "ready" ? (
+            <p
+              className={
+                source.status === "error"
+                  ? "px-6 py-10 text-sm text-red-600"
+                  : "px-6 py-10 text-sm text-muted-foreground"
+              }
+              role="status"
+            >
+              {source.status === "error" ? messages.feedback.error : messages.feedback.loading}
+            </p>
+          ) : (
           <Table className="min-w-[980px]">
             <TableCaption>{messages.searchTerms.caption}</TableCaption>
             <TableHeader>
@@ -97,7 +112,11 @@ export function SearchTermsTable() {
                     <TableRow key={row.id}>
                       <TableCell className="font-medium">{row.term}</TableCell>
                       <TableCell>
-                        <Badge variant="outline">{messages.searchTerms.match[row.match]}</Badge>
+                        {row.match ? (
+                          <Badge variant="outline">{messages.searchTerms.match[row.match]}</Badge>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
                       </TableCell>
                       <TableCell>{row.campaign}</TableCell>
                       <TableCell className="text-right tabular-nums">
@@ -110,7 +129,7 @@ export function SearchTermsTable() {
                         {formatNumber(row.purchases)}
                       </TableCell>
                       <TableCell className="text-right tabular-nums">
-                        {formatMoney(row.spend)}
+                        {formatMoney(row.spend, 2)}
                       </TableCell>
                       <TableCell
                         className={cn(
@@ -122,7 +141,13 @@ export function SearchTermsTable() {
                         {value === null ? "—" : formatMoney(value, 2)}
                       </TableCell>
                       <TableCell>
-                        <Badge variant={signalVariant[row.signal]}>{messages.searchTerms.signal[row.signal]}</Badge>
+                        {row.signal ? (
+                          <Badge variant={signalVariant[row.signal]}>
+                            {messages.searchTerms.signal[row.signal]}
+                          </Badge>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
                       </TableCell>
                     </TableRow>
                   )
@@ -130,6 +155,7 @@ export function SearchTermsTable() {
               )}
             </TableBody>
           </Table>
+          )}
         </CardContent>
       </Card>
     </section>

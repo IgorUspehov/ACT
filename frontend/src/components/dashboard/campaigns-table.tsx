@@ -15,12 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  campaigns,
-  reportingWindow,
-  totalsOf,
-  type CampaignStatus,
-} from "@/data/demo"
+import { totalsOf, type Campaign, type CampaignStatus } from "@/data/demo"
+import type { Resource } from "@/lib/api"
 import { formatMoney, formatNumber, formatRoas } from "@/lib/format"
 import { fill, useI18n } from "@/i18n"
 import { cpa, roas } from "@/lib/metrics"
@@ -68,19 +64,31 @@ function RoasCell({ revenue, spend }: { revenue: number; spend: number }) {
   )
 }
 
-export function CampaignsTable() {
+function ApiNotice({ source }: { source: Exclude<Resource<Campaign[]>, { status: "ready" }> }) {
+  const { messages } = useI18n()
+  const failed = source.status === "error"
+  return (
+    <p className={failed ? "px-6 py-10 text-sm text-red-600" : "px-6 py-10 text-sm text-muted-foreground"} role="status">
+      {failed ? messages.feedback.error : messages.feedback.loading}
+    </p>
+  )
+}
+
+export function CampaignsTable({ source }: { source: Resource<Campaign[]> }) {
   const { messages } = useI18n()
   const [query, setQuery] = useState("")
   const [status, setStatus] = useState<StatusFilter>("All")
+  const campaigns = source.status === "ready" ? source.data : []
 
   const rows = useMemo(() => {
+    if (source.status !== "ready") return []
     const needle = query.trim().toLowerCase()
-    return campaigns.filter((campaign) => {
+    return source.data.filter((campaign) => {
       const matchesStatus = status === "All" || campaign.status === status
       const matchesQuery = needle.length === 0 || campaign.name.toLowerCase().includes(needle)
       return matchesStatus && matchesQuery
     })
-  }, [query, status])
+  }, [source, query, status])
 
   const totals = totalsOf(rows)
 
@@ -93,9 +101,8 @@ export function CampaignsTable() {
               <CardTitle>{messages.campaigns.title}</CardTitle>
               <CardDescription className="mt-1">
                 {fill(messages.campaigns.summary, {
-                  shown: rows.length,
+                  shown: source.status === "ready" ? rows.length : 0,
                   total: campaigns.length,
-                  window: reportingWindow,
                 })}
               </CardDescription>
             </div>
@@ -126,10 +133,11 @@ export function CampaignsTable() {
           </div>
         </CardHeader>
         <CardContent className="px-0">
+          {source.status !== "ready" ? (
+            <ApiNotice source={source} />
+          ) : (
           <Table className="min-w-[880px]">
-            <TableCaption>
-              {fill(messages.campaigns.caption, { window: reportingWindow })}
-            </TableCaption>
+            <TableCaption>{messages.campaigns.caption}</TableCaption>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
                 <TableHead>{messages.campaigns.columns.campaign}</TableHead>
@@ -154,12 +162,16 @@ export function CampaignsTable() {
                   <TableRow key={campaign.id}>
                     <TableCell className="font-medium">{campaign.name}</TableCell>
                     <TableCell>
-                      <Badge variant={statusVariant[campaign.status]}>
-                        {messages.campaigns.status[campaign.status]}
-                      </Badge>
+                      {campaign.status ? (
+                        <Badge variant={statusVariant[campaign.status]}>
+                          {messages.campaigns.status[campaign.status]}
+                        </Badge>
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
-                      {formatMoney(campaign.spend)}
+                      {formatMoney(campaign.spend, 2)}
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
                       {formatNumber(campaign.installs)}
@@ -168,7 +180,7 @@ export function CampaignsTable() {
                       {formatNumber(campaign.purchases)}
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
-                      {formatMoney(campaign.revenue)}
+                      {formatMoney(campaign.revenue, 2)}
                     </TableCell>
                     <TableCell className="text-right">
                       <CpaCell spend={campaign.spend} purchases={campaign.purchases} />
@@ -186,7 +198,7 @@ export function CampaignsTable() {
                   <TableCell>{messages.campaigns.total}</TableCell>
                   <TableCell />
                   <TableCell className="text-right tabular-nums">
-                    {formatMoney(totals.spend)}
+                    {formatMoney(totals.spend, 2)}
                   </TableCell>
                   <TableCell className="text-right tabular-nums">
                     {formatNumber(totals.installs)}
@@ -195,7 +207,7 @@ export function CampaignsTable() {
                     {formatNumber(totals.purchases)}
                   </TableCell>
                   <TableCell className="text-right tabular-nums">
-                    {formatMoney(totals.revenue)}
+                    {formatMoney(totals.revenue, 2)}
                   </TableCell>
                   <TableCell className="text-right">
                     <CpaCell spend={totals.spend} purchases={totals.purchases} />
@@ -207,6 +219,7 @@ export function CampaignsTable() {
               </TableFooter>
             ) : null}
           </Table>
+          )}
         </CardContent>
       </Card>
     </section>

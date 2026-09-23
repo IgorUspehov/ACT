@@ -22,6 +22,10 @@ export type Messages = {
   brand: {
     performance: string
   }
+  feedback: {
+    loading: string
+    error: string
+  }
   workspace: {
     label: string
     account: string
@@ -102,6 +106,7 @@ export type Messages = {
   decisions: {
     title: string
     summary: string
+    empty: string
     day: string
     status: {
       Applied: string

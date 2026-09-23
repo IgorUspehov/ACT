@@ -1,7 +1,6 @@
 import { navItems, type SectionId } from "@/components/layout/nav"
 import { locales, useI18n } from "@/i18n"
 import type { Messages } from "@/i18n/types"
-import { reportingWindow } from "@/data/demo"
 import { cn } from "@/lib/utils"
 
 const sectionKey: Record<SectionId, keyof Messages["nav"]> = {
@@ -24,7 +23,7 @@ export function TopBar({ active, onNavigate }: TopBarProps) {
     <header className="sticky top-0 z-20 border-t-4 border-t-primary border-b bg-card">
       <div className="grid h-14 grid-cols-[1fr_auto] items-center gap-3 px-4 sm:px-6 md:grid-cols-[1fr_auto_1fr]">
         <p className="text-lg font-semibold tracking-tight">ACT</p>
-        <p className="hidden text-sm text-muted-foreground md:block">{reportingWindow}</p>
+        <p className="hidden text-sm text-muted-foreground md:block">{messages.workspace.account}</p>
         <div className="flex items-center justify-self-end gap-2">
           <div
             role="group"
